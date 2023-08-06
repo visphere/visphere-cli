@@ -23,8 +23,6 @@
 
 "use strict";
 
-const path = require("path");
-
 const utils = require("../helpers/helpers.js");
 const promisifyUtils = require("../helpers/promisify-utils.js");
 
@@ -34,9 +32,10 @@ const { mode } = utils.checkInputArguments([
     { name: "mode", alias: "m", type: String },
 ]);
 
+utils.loadEnvVariables();
 utils.printBaseMigratorInfo(mode);
 
-const targetDirectory = path.resolve(__dirname, "..", "..", "..", "moonsphere-web-client");
+const targetDirectory = process.env.MSPH_WEB_CLIENT_PATH;
 const containerName = "msph-web-client";
 const allStages = 4;
 let currentStage = 1;

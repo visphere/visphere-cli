@@ -23,7 +23,6 @@
 
 "use strict";
 
-const path = require("path");
 const { exec } = require("promisify-child-process");
 
 const utils = require("../helpers/helpers.js");
@@ -36,9 +35,10 @@ const { mode, restart } = utils.checkInputArguments([
     { name: "restart", alias: "r", type: Boolean },
 ]);
 
+utils.loadEnvVariables();
 utils.printBaseMigratorInfo(mode);
 
-const targetDirectory = path.resolve(__dirname, "..", "..", "..", "moonsphere-content-distributor");
+const targetDirectory = process.env.MSPH_CONTENT_DISTRIBUTOR_PATH;
 const containerName = "msph-content-distributor";
 const allStages = restart ? 4 : 3;
 let currentStage = 1;

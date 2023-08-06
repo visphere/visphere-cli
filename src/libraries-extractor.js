@@ -33,11 +33,13 @@ const promisifyUtils = require("./helpers/promisify-utils");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+utils.loadEnvVariables();
+
 const scanningPackages = [
-    "_moonsphere-scripts",
-    "moonsphere-desktop-client",
-    "moonsphere-landing-page",
-    "moonsphere-web-client",
+    path.resolve(__dirname, ".."),
+    process.env.MSPH_WEB_CLIENT_PATH,
+    process.env.MSPH_DESKTOP_CLIENT_PATH,
+    //process.env.MSPH_LANDING_PAGE_PATH,
 ];
 
 const staticReplacements = [
@@ -49,9 +51,8 @@ const containerName = "msph-content-distributor";
 
 const outputMarkdownfile = "LIBRARIES.md";
 const outputJsonfile = "libraries.json";
-const outputMarkdownPath = path.resolve(__dirname, "..", "..", outputMarkdownfile);
-const outputJsonPath = path.resolve(__dirname, "..", "..","moonsphere-content-distributor",
-    "content", "static", "misc", outputJsonfile);
+const outputMarkdownPath = path.join(process.env.MSPH_BASE_PATH, outputMarkdownfile);
+const outputJsonPath = path.join(process.env.MSPH_CONTENT_DISTRIBUTOR_PATH, "content", "static", "misc", outputJsonfile);
 
 utils.printCopyHeader();
 utils.printExecutableScriptInfo();
@@ -72,7 +73,7 @@ async function readAllScannedPackagesDependencies() {
     });
     try {
         for (const packagePath of scanningPackages) {
-            const data = await fs.promises.readFile(path.resolve(__dirname, "..", "..", packagePath, "package.json"));
+            const data = await fs.promises.readFile(path.join(packagePath, "package.json"));
             const parsedData = JSON.parse(data.toString());
 
             const depSection = parsedData["dependencies"];

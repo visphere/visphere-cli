@@ -32,11 +32,13 @@ const promisifyUtils = require("./helpers/promisify-utils.js");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+utils.loadEnvVariables();
+
 const templateFileName = ".env.sample";
 const outputFileName = ".env";
 
-const templateFile = path.resolve(__dirname, "..", "..", templateFileName);
-const outputFile = path.resolve(__dirname, "..", "..", outputFileName);
+const templateFile = path.join(process.env.MSPH_BASE_PATH, templateFileName);
+const outputFile = path.join(process.env.MSPH_BASE_PATH, outputFileName);
 
 const { replace } = utils.checkInputArguments([
     { name: "replace", alias: "r", type: Boolean },

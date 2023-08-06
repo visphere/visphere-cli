@@ -23,7 +23,7 @@
 
 module.exports = {
     personalPageUrl: "https://miloszgilga.pl",
-    projectPageUrl: "https://github.com/Milosz08/moonsphere",
+    projectPageUrl: "https://github.com/moonsphere-systems",
     licensedBy: "MoonSphere Systems",
     license: "Apache 2.0",
     mainDeveloper: "MILOSZ GILGA",

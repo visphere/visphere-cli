@@ -23,8 +23,10 @@
 
 "use strict";
 
+const fs = require("fs");
 const path = require("path");
 const colors = require("colors");
+const dotenv = require("dotenv");
 const commandLineArgs = require("command-line-args");
 
 const config = require("../config.js");
@@ -113,6 +115,12 @@ module.exports = {
     printReplaceMode: function (isReplace) {
         if (isReplace) {
             console.log(`Executing script in ${"replace".cyan} mode.`);
+        }
+    },
+    loadEnvVariables: function () {
+        const envLocalPath = path.resolve(__dirname, "..", "..", ".env.local");
+        if (fs.existsSync(envLocalPath)) {
+            dotenv.config({ path: envLocalPath });
         }
     },
 };
