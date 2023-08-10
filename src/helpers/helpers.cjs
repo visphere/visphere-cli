@@ -34,13 +34,19 @@ colors.enable();
 
 module.exports = {
   printCopyHeader: function () {
-    console.log(`(c) ${new Date().getFullYear()} by ${config.licensedBy.cyan}. On ${config.license} license.`);
+    console.log(
+      `(c) ${new Date().getFullYear()} by ${config.licensedBy.cyan}. On ${
+        config.license
+      } license.`
+    );
     console.log(`Developed by ${config.mainDeveloper}.\n`);
     console.log(`  Personal page: ${config.personalPageUrl}`);
     console.log(`  Repository url: ${config.projectPageUrl}\n`);
   },
   contentHeader: [
-    `#! (c) ${new Date().getFullYear()} by ${config.licensedBy}. On ${config.license} license.\n`,
+    `#! (c) ${new Date().getFullYear()} by ${config.licensedBy}. On ${
+      config.license
+    } license.\n`,
     `#! Developed by ${config.mainDeveloper}.\n`,
     '#!\n',
     `#!   Personal page: ${config.personalPageUrl}\n`,
@@ -50,7 +56,9 @@ module.exports = {
     `#! Node iterpreter version, ${process.version}, platform: ${process.platform}`,
   ].join(''),
   printExecutableScriptInfo: function () {
-    console.log(`Executing script from: ${path.basename(process.argv[1]).cyan}`);
+    console.log(
+      `Executing script from: ${path.basename(process.argv[1]).cyan}`
+    );
   },
   printSelectedModeInfo: function (mode) {
     console.log(`Preparing for ${`"${mode}"`.cyan} mode.`);
@@ -72,7 +80,9 @@ module.exports = {
   },
   checkIfPassedModeIsValid: function (mode) {
     if (mode !== 'dev' && mode !== 'prod') {
-      this.printErrorMessage('Unrecognized mode. Available only "dev" and "prod".');
+      this.printErrorMessage(
+        'Unrecognized mode. Available only "dev" and "prod".'
+      );
       process.exit(1);
     }
   },

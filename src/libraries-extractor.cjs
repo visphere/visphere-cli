@@ -61,13 +61,23 @@ const containerName = submodules.contentDistributor.dockerContainerName;
 const outputMarkdownfile = 'LIBRARIES.md';
 const outputJsonfile = 'libraries.json';
 const outputMarkdownPath = path.join(submodules.base.path, outputMarkdownfile);
-const outputJsonPath = path.join(submodules.contentDistributor.path, 'content', 'static', 'misc', outputJsonfile);
+const outputJsonPath = path.join(
+  submodules.contentDistributor.path,
+  'content',
+  'static',
+  'misc',
+  outputJsonfile
+);
 
 utils.printCopyHeader();
 utils.printExecutableScriptInfo();
 
-console.log(`Scanning packages: ${scanningPackages.map(p => p.cyan).join(', ')}`);
-console.log(`Output files: [ ${outputMarkdownfile.cyan}, ${outputJsonfile.cyan} ]`);
+console.log(
+  `Scanning packages: ${scanningPackages.map(p => p.cyan).join(', ')}`
+);
+console.log(
+  `Output files: [ ${outputMarkdownfile.cyan}, ${outputJsonfile.cyan} ]`
+);
 
 utils.printNewLine();
 
@@ -83,12 +93,18 @@ async function readAllScannedPackagesDependencies() {
   });
   try {
     for (const packagePath of scanningPackages) {
-      const data = await fs.promises.readFile(path.join(packagePath, 'package.json'));
+      const data = await fs.promises.readFile(
+        path.join(packagePath, 'package.json')
+      );
       const parsedData = JSON.parse(data.toString());
 
       const depSection = parsedData.dependencies;
       const devDepSection = parsedData.devDependencies;
-      if (depSection) resultsArray.push(...Object.keys(depSection).map(name => ({ name, env: 'runtime' })));
+      if (depSection) {
+        resultsArray.push(
+          ...Object.keys(depSection).map(name => ({ name, env: 'runtime' }))
+        );
+      }
       if (devDepSection) {
         resultsArray.push(
           ...Object.keys(devDepSection).map(name => ({
@@ -99,10 +115,17 @@ async function readAllScannedPackagesDependencies() {
       }
     }
   } catch (err) {
-    utils.stopErrorSpinner(spinner, 'Unable to scan some of the packages', currentStage, allStages);
+    utils.stopErrorSpinner(
+      spinner,
+      'Unable to scan some of the packages',
+      currentStage,
+      allStages
+    );
     throw new Error(err);
   }
-  const resultArr = lodash.uniqBy(resultsArray, 'name').sort((x, y) => x.name.localeCompare(y.name));
+  const resultArr = lodash
+    .uniqBy(resultsArray, 'name')
+    .sort((x, y) => x.name.localeCompare(y.name));
   utils.stopSucessSpinner(
     spinner,
     `Ended scanning "package.json" files. Resolve ${resultArr.length} dependencies`,
@@ -123,10 +146,14 @@ async function connectWithApiAndGenerateOutputObject(allLibrariesNames) {
   });
   try {
     for (const { name, env } of allLibrariesNames) {
-      const replacer = staticReplacements.find(({ name: pName }) => pName === name);
+      const replacer = staticReplacements.find(
+        ({ name: pName }) => pName === name
+      );
       const libraryColorName = name.cyan;
       if (!replacer) {
-        const { data } = await axios.get(`https://registry.npmjs.org/${name}/latest`);
+        const { data } = await axios.get(
+          `https://registry.npmjs.org/${name}/latest`
+        );
         if (data) fetchedSucceed++;
         let repoUrl = '';
         if (data.repository) {
@@ -143,7 +170,9 @@ async function connectWithApiAndGenerateOutputObject(allLibrariesNames) {
           spinner,
           currentStage,
           allStages,
-          `${index++}/${allLibrariesNames.length} Fetched data for: ${libraryColorName}.`
+          `${index++}/${
+            allLibrariesNames.length
+          } Fetched data for: ${libraryColorName}.`
         );
       } else {
         outputArray.push(replacer);
@@ -151,7 +180,9 @@ async function connectWithApiAndGenerateOutputObject(allLibrariesNames) {
           spinner,
           currentStage,
           allStages,
-          `${index++}/${allLibrariesNames.length} Skipping fetching data for: ${libraryColorName}.`
+          `${index++}/${
+            allLibrariesNames.length
+          } Skipping fetching data for: ${libraryColorName}.`
         );
       }
     }
@@ -164,7 +195,9 @@ async function connectWithApiAndGenerateOutputObject(allLibrariesNames) {
     );
     throw new Error(err);
   }
-  const percentage = Math.ceil((fetchedSucceed / allLibrariesNames.length) * 100);
+  const percentage = Math.ceil(
+    (fetchedSucceed / allLibrariesNames.length) * 100
+  );
   const coverageInfo = `${fetchedSucceed} of ${allLibrariesNames.length} (coverage: ${percentage}%)`;
   utils.stopSucessSpinner(
     spinner,
@@ -186,13 +219,21 @@ async function saveContentToLibrariesFiles(outputLibsArray) {
   try {
     const librariesCountTrivia = [
       `All used 3rd party libraries count: **${outputLibsArray.length}**<br>\n`,
-      `Runtime 3rd party libraries count: **${outputLibsArray.filter(d => d.env === 'runtime').length}**<br>\n`,
-      `Development 3rd party libraries count: **${outputLibsArray.filter(d => d.env === 'development').length}**\n\n`,
+      `Runtime 3rd party libraries count: **${
+        outputLibsArray.filter(d => d.env === 'runtime').length
+      }**<br>\n`,
+      `Development 3rd party libraries count: **${
+        outputLibsArray.filter(d => d.env === 'development').length
+      }**\n\n`,
     ].join('');
     await fs.promises.writeFile(outputMarkdownPath, librariesCountTrivia);
     const table = markdownTable([
       ['Library', 'License', 'Environment'],
-      ...outputLibsArray.map(({ name, repoUrl, license, env }) => [`[${name}](${repoUrl})`, license, env]),
+      ...outputLibsArray.map(({ name, repoUrl, license, env }) => [
+        `[${name}](${repoUrl})`,
+        license,
+        env,
+      ]),
     ]);
     await fs.promises.appendFile(outputMarkdownPath, table + '\n');
     utils.revalidateSpinnerContent(
@@ -219,7 +260,12 @@ async function saveContentToLibrariesFiles(outputLibsArray) {
       `${currentOutput++}/2 Saved data to file: ${outputJsonfile.cyan}.`
     );
   } catch (err) {
-    utils.stopErrorSpinner(spinner, 'Unable to save data in some output file/s', currentStage, allStages);
+    utils.stopErrorSpinner(
+      spinner,
+      'Unable to save data in some output file/s',
+      currentStage,
+      allStages
+    );
     throw new Error(err);
   }
   utils.stopSucessSpinner(
@@ -238,7 +284,9 @@ async function processing() {
       allStages,
     });
     const allLibrariesNames = await readAllScannedPackagesDependencies();
-    const outputLibsArray = await connectWithApiAndGenerateOutputObject(allLibrariesNames);
+    const outputLibsArray = await connectWithApiAndGenerateOutputObject(
+      allLibrariesNames
+    );
     await saveContentToLibrariesFiles(outputLibsArray);
     await promisifyUtils.createPromisifyProcess({
       execCommand: `docker exec ${containerName} rm -rf /var/www/html/static/misc/${outputJsonfile}`,

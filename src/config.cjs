@@ -35,7 +35,12 @@ module.exports = {
   mainDeveloper: 'MILOSZ GILGA',
   submodules: {
     contentDistributor: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-content-distributor'),
+      path: path.resolve(
+        __dirname,
+        '..',
+        '..',
+        'moonsphere-content-distributor'
+      ),
       dockerContainerName: 'msph-content-distributor',
     },
     webClient: {

@@ -51,9 +51,20 @@ async function restartApacheWebServer(stage) {
   });
   try {
     await exec(`docker exec ${containerName} apachectl restart`);
-    utils.stopSucessSpinner(spinner, `Successfully ${endMessage}`, stage, allStages);
+    utils.stopSucessSpinner(
+      spinner,
+      `Successfully ${endMessage}`,
+      stage,
+      allStages
+    );
   } catch (err) {
-    utils.execCommonErrorContent(spinner, err, `Failure ${endMessage}`, stage, allStages);
+    utils.execCommonErrorContent(
+      spinner,
+      err,
+      `Failure ${endMessage}`,
+      stage,
+      allStages
+    );
   }
 }
 
@@ -88,5 +99,7 @@ async function processing() {
 
 processing().then(() => {
   utils.printNewLine();
-  utils.printSuccessMessage('Migrated content-distributor into docker container.');
+  utils.printSuccessMessage(
+    'Migrated content-distributor into docker container.'
+  );
 });

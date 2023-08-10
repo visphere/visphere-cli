@@ -38,7 +38,9 @@ const outputFileName = '.env';
 const templateFile = path.join(submodules.base.path, templateFileName);
 const outputFile = path.join(submodules.base.path, outputFileName);
 
-const { replace } = utils.checkInputArguments([{ name: 'replace', alias: 'r', type: Boolean }]);
+const { replace } = utils.checkInputArguments([
+  { name: 'replace', alias: 'r', type: Boolean },
+]);
 
 utils.printCopyHeader();
 utils.printExecutableScriptInfo();
@@ -49,7 +51,9 @@ const allStages = replace ? 2 : 3;
 let currentStage = 1;
 
 async function checkFile(fileName, filePath, isReverse, stage) {
-  const errorMessage = `File "${fileName}" ${isReverse ? 'already' : 'not'} exist`;
+  const errorMessage = `File "${fileName}" ${
+    isReverse ? 'already' : 'not'
+  } exist`;
   const spinner = promisifyUtils.createAndStartSpinner({
     stage,
     allStages,
@@ -60,7 +64,12 @@ async function checkFile(fileName, filePath, isReverse, stage) {
     exist = !exist;
   }
   if (exist) {
-    utils.stopSucessSpinner(spinner, `File "${fileName}" ${isReverse ? 'not ' : ''}exist`, stage, allStages);
+    utils.stopSucessSpinner(
+      spinner,
+      `File "${fileName}" ${isReverse ? 'not ' : ''}exist`,
+      stage,
+      allStages
+    );
   } else {
     utils.stopErrorSpinner(spinner, errorMessage, stage, allStages);
     throw new Error(errorMessage);
@@ -78,13 +87,28 @@ async function generateFile() {
     const data = await fs.promises.readFile(templateFile, 'utf8');
     const lines = data.split('\n');
     for (const line of lines) {
-      if ((line.startsWith('#') || line.startsWith('# ')) && !line.startsWith('#!')) continue;
+      if (
+        (line.startsWith('#') || line.startsWith('# ')) &&
+        !line.startsWith('#!')
+      ) {
+        continue;
+      }
       outputData += line;
     }
     await fs.promises.writeFile(outputFile, outputData);
-    utils.stopSucessSpinner(spinner, `Content in "${outputFileName}" file was generated`, currentStage, allStages);
+    utils.stopSucessSpinner(
+      spinner,
+      `Content in "${outputFileName}" file was generated`,
+      currentStage,
+      allStages
+    );
   } catch (err) {
-    utils.stopErrorSpinner(spinner, `Unable to generate content in "${outputFileName}" file`, currentStage, allStages);
+    utils.stopErrorSpinner(
+      spinner,
+      `Unable to generate content in "${outputFileName}" file`,
+      currentStage,
+      allStages
+    );
     throw new Error(err);
   }
 }
@@ -92,9 +116,21 @@ async function generateFile() {
 async function processing() {
   try {
     if (!replace) {
-      await checkFile(outputFileName, outputFile, true, currentStage++, allStages);
+      await checkFile(
+        outputFileName,
+        outputFile,
+        true,
+        currentStage++,
+        allStages
+      );
     }
-    await checkFile(templateFileName, templateFile, false, currentStage++, allStages);
+    await checkFile(
+      templateFileName,
+      templateFile,
+      false,
+      currentStage++,
+      allStages
+    );
     await generateFile();
   } catch (err) {
     utils.printNewLine();
@@ -105,5 +141,7 @@ async function processing() {
 
 processing().then(() => {
   utils.printNewLine();
-  utils.printSuccessMessage(`Env file from template was generated in "${outputFile}".`);
+  utils.printSuccessMessage(
+    `Env file from template was generated in "${outputFile}".`
+  );
 });

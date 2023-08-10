@@ -29,7 +29,9 @@ const utils = require('../helpers/helpers.cjs');
 const promisifyUtils = require('../helpers/promisify-utils.cjs');
 const { submodules } = require('../config.cjs');
 
-const { mode } = utils.checkInputArguments([{ name: 'mode', alias: 'm', type: String }]);
+const { mode } = utils.checkInputArguments([
+  { name: 'mode', alias: 'm', type: String },
+]);
 
 utils.loadEnvVariables();
 utils.printBaseMigratorInfo(mode);

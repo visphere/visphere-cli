@@ -39,7 +39,12 @@ const rsaKeysDirPath = path.join(submodules.base.path, 'rsa-keys');
 const envPath = path.join(submodules.base.path, '.env');
 
 const servicePrefix = 'msph';
-const availableService = ['content-distributor', 'web-client', 'landing-page', 'all'];
+const availableService = [
+  'content-distributor',
+  'web-client',
+  'landing-page',
+  'all',
+];
 const rsaClientKeyName = 'id_rsa';
 const rsaServerKeyName = 'id_srv_rsa';
 const rsaKeys = [rsaClientKeyName, rsaServerKeyName];
@@ -50,12 +55,16 @@ const { mode, service } = utils.checkInputArguments([
 ]);
 
 if (!availableService.some(s => s === service)) {
-  utils.printErrorMessage(`Unrecognized service. Available only ${availableService.join(', ')}.`);
+  utils.printErrorMessage(
+    `Unrecognized service. Available only ${availableService.join(', ')}.`
+  );
   process.exit(1);
 }
 
 utils.printBaseMigratorInfo(mode);
-console.log(`Available services: ${availableService.map(s => s.cyan).join(', ')}.`);
+console.log(
+  `Available services: ${availableService.map(s => s.cyan).join(', ')}.`
+);
 console.log(`Selected service: ${`${servicePrefix}-${service}`.cyan}.`);
 utils.printNewLine();
 
@@ -106,8 +115,14 @@ async function generateRsaKeys() {
         continue;
       }
       const { publicKey, privateKey } = await rsaKeysPromiseGenerator();
-      await fs.promises.writeFile(path.join(rsaKeysDirPath, `${rsaKey}.pub`), publicKey);
-      await fs.promises.writeFile(path.join(rsaKeysDirPath, rsaKey), privateKey);
+      await fs.promises.writeFile(
+        path.join(rsaKeysDirPath, `${rsaKey}.pub`),
+        publicKey
+      );
+      await fs.promises.writeFile(
+        path.join(rsaKeysDirPath, rsaKey),
+        privateKey
+      );
       notExist.push(rsaKey);
       utils.revalidateSpinnerContent(
         spinner,
@@ -124,7 +139,12 @@ async function generateRsaKeys() {
     }
     utils.stopSucessSpinner(spinner, message, currentStage++, allStages);
   } catch (err) {
-    utils.stopErrorSpinner(spinner, 'Unable to generate RSA key/s', currentStage, allStages);
+    utils.stopErrorSpinner(
+      spinner,
+      'Unable to generate RSA key/s',
+      currentStage,
+      allStages
+    );
     throw new Error(err);
   }
 }
@@ -133,7 +153,10 @@ async function startDockerContainer(runService) {
   const spinner = promisifyUtils.createAndStartSpinner({
     stage: currentStage,
     allStages,
-    messages: runService === 'all' ? 'Starting all docker containers' : `Starting docker container: ${runService.cyan}`,
+    messages:
+      runService === 'all'
+        ? 'Starting all docker containers'
+        : `Starting docker container: ${runService.cyan}`,
   });
   try {
     let command = `cross-env ENV_BUILD_MODE=${mode} docker-compose --env-file ${envPath} -f ${composeFilePath} up -d`;
@@ -143,12 +166,21 @@ async function startDockerContainer(runService) {
     await exec(command);
     utils.stopSucessSpinner(
       spinner,
-      `Successfully started ${runService === 'all' ? 'all docker containers' : `docker container: ${runService}`}`,
+      `Successfully started ${
+        runService === 'all'
+          ? 'all docker containers'
+          : `docker container: ${runService}`
+      }`,
       currentStage++,
       allStages
     );
   } catch (err) {
-    utils.stopErrorSpinner(spinner, `Unable to start docker container: ${runService}`, currentStage, allStages);
+    utils.stopErrorSpinner(
+      spinner,
+      `Unable to start docker container: ${runService}`,
+      currentStage,
+      allStages
+    );
     throw new Error(err);
   }
 }
@@ -157,7 +189,9 @@ async function processing() {
   try {
     await generateRsaKeys();
     if (service === 'all') {
-      for (const containerService of availableService.filter(s => s !== 'all')) {
+      for (const containerService of availableService.filter(
+        s => s !== 'all'
+      )) {
         await startDockerContainer(containerService);
       }
     } else {
