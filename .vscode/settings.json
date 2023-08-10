@@ -4,6 +4,7 @@
     "titleBar.activeBackground": "#583e15",
     "titleBar.inactiveBackground": "#583e15"
   },
+  "prettier.configPath": "./.prettierrc.js",
   "editor.detectIndentation": false,
   "psi-header.variables": [
     ["msph_projectName", "moonsphere"],
