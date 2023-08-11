@@ -23,4 +23,4 @@
  * governing permissions and limitations under the license.
  */
 
-'use scrict';
+'use strict';

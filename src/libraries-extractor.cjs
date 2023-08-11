@@ -23,7 +23,7 @@
  * governing permissions and limitations under the license.
  */
 
-'use scrict';
+'use strict';
 
 const fs = require('fs');
 const path = require('path');

@@ -23,7 +23,7 @@
  * governing permissions and limitations under the license.
  */
 
-'use scrict';
+'use strict';
 
 const utils = require('../helpers/helpers.cjs');
 const promisifyUtils = require('../helpers/promisify-utils.cjs');

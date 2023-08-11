@@ -23,7 +23,7 @@
  * governing permissions and limitations under the license.
  */
 
-'use scrict';
+'use strict';
 
 const { Spinner } = require('cli-spinner');
 const { spawn, exec } = require('promisify-child-process');

@@ -23,7 +23,7 @@
  * governing permissions and limitations under the license.
  */
 
-'use scrict';
+'use strict';
 
 const { exec } = require('promisify-child-process');
 const utils = require('../helpers/helpers.cjs');

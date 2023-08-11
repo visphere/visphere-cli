@@ -33,7 +33,7 @@
       "language": "javascript",
       "begin": "/*",
       "lineLength": 64,
-      "afterHeader": ["'use scrict';"]
+      "afterHeader": ["'use strict';"]
     },
     {
       "language": "*",

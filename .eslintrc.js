@@ -23,6 +23,6 @@
  * governing permissions and limitations under the license.
  */
 
-'use scrict';
+'use strict';
 
 module.exports = require('../moonsphere-base/config/eslint/_eslint-node.config.cjs');
