@@ -25,14 +25,4 @@
 
 'use scrict';
 
-module.exports = {
-  tabWidth: 2,
-  printWidth: 80,
-  useTabs: false,
-  singleQuote: true,
-  semi: true,
-  bracketSpacing: true,
-  arrowParens: 'avoid',
-  trailingComma: 'es5',
-  bracketSameLine: true,
-};
+module.exports = require('../moonsphere-base/config/prettier/_prettier-base.config.cjs');
