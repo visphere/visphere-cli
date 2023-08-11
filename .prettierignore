@@ -1,6 +1,5 @@
 node_modules
 .husky
 LICENSE
-package.json
 yarn.lock
 .gitignore
