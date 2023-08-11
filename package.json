@@ -18,7 +18,10 @@
     "docker-run:landing-page:prod": "node src/docker-run.cjs --mode=prod --service=landing-page",
     "docker-run:dev": "node src/docker-run.cjs --mode=dev --service=all",
     "docker-run:prod": "node src/docker-run.cjs --mode=prod --service=all",
-    "configure:husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
+    "configure:husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\"",
+    "lint:check": "npx eslint src/**/*.{js,cjs}",
+    "lint:fix": "npx eslint src/**/*.{js,cjs} --fix",
+    "format": "npx prettier . --write"
   },
   "private": true,
   "author": {
@@ -29,8 +32,8 @@
   "license": "Apache-2.0",
   "lint-staged": {
     "**/*.{js,cjs,json}": [
-      "eslint . --fix",
-      "prettier --write ."
+      "yarn run lint:fix",
+      "yarn run format"
     ]
   },
   "husky": {
