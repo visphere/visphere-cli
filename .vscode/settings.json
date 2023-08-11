@@ -6,6 +6,13 @@
   },
   "prettier.configPath": "./.prettierrc.js",
   "editor.detectIndentation": false,
+  "editor.mouseWheelZoom": true,
+  "explorer.autoReveal": false,
+  "explorer.compactFolders": false,
+  "workbench.tree.indent": 20,
+  "workbench.iconTheme": "vsc-jetbrains-icons-enhanced",
+  "workbench.preferredDarkColorTheme": "One Dark Pro Monokai Darker",
+  "files.insertFinalNewline": true,
   "psi-header.variables": [
     ["msph_projectName", "moonsphere"],
     ["msph_moduleName", "moonsphere-scripts"]
