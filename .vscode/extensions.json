@@ -13,6 +13,7 @@
     "bradlc.vscode-tailwindcss",
     "christian-kohler.npm-intellisense",
     "dbaeumer.vscode-eslint",
-    "naumovs.color-highlight"
+    "naumovs.color-highlight",
+    "oderwat.indent-rainbow"
   ]
 }
