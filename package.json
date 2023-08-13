@@ -1,5 +1,5 @@
 {
-  "name": "moonsphere-scripts",
+  "name": "moonsphere-cli",
   "version": "1.0.0",
   "scripts": {
     "docker-mig:web-client:dev": "node src/migrator/web-client.migrator.cjs --mode=dev",
@@ -25,9 +25,9 @@
   },
   "private": true,
   "author": {
-    "name": "Miłosz Gilga",
-    "email": "personal@miloszgilga.pl",
-    "url": "https://miloszgilga.pl"
+    "name": "MoonSphere Systems",
+    "email": "info@moonsphere.pl",
+    "url": "https://moonsphere.pl"
   },
   "license": "Apache-2.0",
   "lint-staged": {
