@@ -60,7 +60,7 @@ module.exports = {
       containerName: null,
     },
     scripts: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-scripts'),
+      path: path.resolve(__dirname, '..', '..', 'moonsphere-cli'),
       containerName: null,
     },
   },
