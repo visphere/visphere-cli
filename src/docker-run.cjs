@@ -3,11 +3,11 @@
  * Silesian University of Technology
  *
  *   File name: docker-run.cjs
- *   Created at: 2023-08-10, 22:29:41
- *   Last updated at: 2023-08-11, 20:44:40
+ *   Created at: 2023-08-13, 05:55:46
+ *   Last updated at: 2023-08-13, 14:53:40
  *
  *   Project name: moonsphere
- *   Module name: moonsphere-scripts
+ *   Module name: moonsphere-cli
  *
  * This project is a part of "MoonSphere" instant messenger system. This system is a part of
  * completing an engineers degree in computer science at Silesian University of Technology.

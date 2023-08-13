@@ -4,10 +4,10 @@
  *
  *   File name: config.cjs
  *   Created at: 2023-08-10, 22:29:41
- *   Last updated at: 2023-08-11, 20:44:34
+ *   Last updated at: 2023-08-13, 14:53:33
  *
  *   Project name: moonsphere
- *   Module name: moonsphere-scripts
+ *   Module name: moonsphere-cli
  *
  * This project is a part of "MoonSphere" instant messenger system. This system is a part of
  * completing an engineers degree in computer science at Silesian University of Technology.

@@ -15,7 +15,7 @@
   "files.insertFinalNewline": true,
   "psi-header.variables": [
     ["msph_projectName", "moonsphere"],
-    ["msph_moduleName", "moonsphere-scripts"]
+    ["msph_moduleName", "moonsphere-cli"]
   ],
   "psi-header.config": {
     "forceToTop": true,

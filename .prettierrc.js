@@ -4,10 +4,10 @@
  *
  *   File name: .prettierrc.js
  *   Created at: 2023-08-10, 22:22:28
- *   Last updated at: 2023-08-11, 20:45:03
+ *   Last updated at: 2023-08-13, 14:54:05
  *
  *   Project name: moonsphere
- *   Module name: moonsphere-scripts
+ *   Module name: moonsphere-cli
  *
  * This project is a part of "MoonSphere" instant messenger system. This system is a part of
  * completing an engineers degree in computer science at Silesian University of Technology.
