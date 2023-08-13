@@ -34,7 +34,11 @@ const utils = require('./helpers/helpers.cjs');
 const promisifyUtils = require('./helpers/promisify-utils.cjs');
 const { submodules } = require('./config.cjs');
 
-const composeFilePath = path.join(submodules.base.path, 'docker-compose.yml');
+const composeFilePath = path.join(
+  submodules.base.path,
+  'docker',
+  'docker-compose.yml'
+);
 const rsaKeysDirPath = path.join(submodules.base.path, 'rsa-keys');
 const envPath = path.join(submodules.base.path, '.env');
 
@@ -159,7 +163,14 @@ async function startDockerContainer(runService) {
         : `Starting docker container: ${runService.cyan}`,
   });
   try {
-    let command = `cross-env ENV_BUILD_MODE=${mode} docker-compose --env-file ${envPath} -f ${composeFilePath} up -d`;
+    let command = [
+      `cross-env ENV_BUILD_MODE=${mode}`,
+      'docker-compose',
+      `--project-name moonsphere`,
+      `--env-file ${envPath}`,
+      `-f ${composeFilePath}`,
+      'up -d',
+    ].join(' ');
     if (runService !== 'all') {
       command += ` ${servicePrefix}-${runService}`;
     }

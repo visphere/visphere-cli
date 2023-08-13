@@ -33,11 +33,10 @@ const { mode } = utils.checkInputArguments([
   { name: 'mode', alias: 'm', type: String },
 ]);
 
-utils.loadEnvVariables();
 utils.printBaseMigratorInfo(mode);
 
 const targetDirectory = submodules.webClient.path;
-const containerName = submodules.webClient.dockerContainerName;
+const containerName = submodules.webClient.containerName;
 
 const allStages = 4;
 let currentStage = 1;

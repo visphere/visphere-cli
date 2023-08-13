@@ -41,27 +41,27 @@ module.exports = {
         '..',
         'moonsphere-content-distributor'
       ),
-      dockerContainerName: 'msph-content-distributor',
+      containerName: 'msph-content-distributor',
     },
     webClient: {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-web-client'),
-      dockerContainerName: 'msph-web-client',
+      containerName: 'msph-web-client',
     },
     landingPage: {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-landing-page'),
-      dockerContainerName: 'msph-landing-page',
+      containerName: 'msph-landing-page',
     },
     desktopClient: {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-desktop-client'),
-      dockerContainerName: null,
+      containerName: null,
     },
     base: {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-base'),
-      dockerContainerName: null,
+      containerName: null,
     },
     scripts: {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-scripts'),
-      dockerContainerName: null,
+      containerName: null,
     },
   },
 };

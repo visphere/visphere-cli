@@ -38,7 +38,7 @@ const scanningPackages = [
   submodules.scripts.path,
   submodules.webClient.path,
   submodules.desktopClient.path,
-  // submodules.landingPage.path,
+  submodules.landingPage.path,
 ];
 
 const staticReplacements = [
@@ -56,7 +56,7 @@ const staticReplacements = [
   },
 ];
 
-const containerName = submodules.contentDistributor.dockerContainerName;
+const containerName = submodules.contentDistributor.containerName;
 
 const outputMarkdownfile = 'LIBRARIES.md';
 const outputJsonfile = 'libraries.json';
