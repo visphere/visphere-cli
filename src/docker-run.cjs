@@ -42,6 +42,13 @@ const composeFilePath = path.join(
 const rsaKeysDirPath = path.join(submodules.base.path, 'rsa-keys');
 const envPath = path.join(submodules.base.path, '.env');
 
+const dockerignorePath = path.join(
+  submodules.base.path,
+  'docker',
+  '.dockerignore'
+);
+const dockerignoreDest = path.resolve(__dirname, '..', '..', '.dockerignore');
+
 const servicePrefix = 'msph';
 const availableService = [
   'content-distributor',
@@ -72,7 +79,7 @@ console.log(
 console.log(`Selected service: ${`${servicePrefix}-${service}`.cyan}.`);
 utils.printNewLine();
 
-const allStages = service === 'all' ? availableService.length : 2;
+const allStages = service === 'all' ? availableService.length + 2 : 4;
 let currentStage = 1;
 
 function checkIfKeyExist(keyName, suffix) {
@@ -153,6 +160,31 @@ async function generateRsaKeys() {
   }
 }
 
+async function dockerignoreFileOperation({ messStart, messEnd, callback }) {
+  const spinner = promisifyUtils.createAndStartSpinner({
+    stage: currentStage,
+    allStages,
+    messages: `${messStart} .dockerignore file`,
+  });
+  try {
+    await callback();
+    utils.stopSucessSpinner(
+      spinner,
+      `Successfully ${messEnd} .dockerignore file`,
+      currentStage++,
+      allStages
+    );
+  } catch (err) {
+    utils.stopErrorSpinner(
+      spinner,
+      `Failure ${messEnd} .dockerignore file`,
+      currentStage,
+      allStages
+    );
+    throw new Error(err);
+  }
+}
+
 async function startDockerContainer(runService) {
   const spinner = promisifyUtils.createAndStartSpinner({
     stage: currentStage,
@@ -199,6 +231,13 @@ async function startDockerContainer(runService) {
 async function processing() {
   try {
     await generateRsaKeys();
+    await dockerignoreFileOperation({
+      messStart: 'Copying',
+      messEnd: 'copied',
+      callback: async () => {
+        fs.promises.copyFile(dockerignorePath, dockerignoreDest);
+      },
+    });
     if (service === 'all') {
       for (const containerService of availableService.filter(
         s => s !== 'all'
@@ -208,6 +247,13 @@ async function processing() {
     } else {
       await startDockerContainer(service);
     }
+    await dockerignoreFileOperation({
+      messStart: 'Removing',
+      messEnd: 'removed',
+      callback: async () => {
+        fs.promises.rm(dockerignoreDest);
+      },
+    });
   } catch (err) {
     utils.printNewLine();
     utils.printErrorMessage(err);
