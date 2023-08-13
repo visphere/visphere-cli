@@ -36,7 +36,7 @@
       "language": "javascript",
       "begin": "/*",
       "lineLength": 64,
-      "afterHeader": ["'use strict';"]
+      "beforeHeader": ["'use strict';"]
     },
     {
       "language": "*",

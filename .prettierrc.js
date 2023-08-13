@@ -1,10 +1,11 @@
+'use strict';
 /*
  * Copyright (c) 2023 by MILOSZ GILGA <https://miloszgilga.pl>
  * Silesian University of Technology
  *
  *   File name: .prettierrc.js
  *   Created at: 2023-08-10, 22:22:28
- *   Last updated at: 2023-08-13, 14:54:05
+ *   Last updated at: 2023-08-14, 01:57:24
  *
  *   Project name: moonsphere
  *   Module name: moonsphere-cli
@@ -22,7 +23,5 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the license.
  */
-
-'use strict';
 
 module.exports = require('../moonsphere-base/config/prettier/_prettier-base.config.cjs');

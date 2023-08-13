@@ -1,10 +1,11 @@
+'use strict';
 /*
  * Copyright (c) 2023 by MILOSZ GILGA <https://miloszgilga.pl>
  * Silesian University of Technology
  *
  *   File name: landing-page.migrator.cjs
  *   Created at: 2023-08-10, 22:29:41
- *   Last updated at: 2023-08-13, 14:53:22
+ *   Last updated at: 2023-08-14, 01:56:47
  *
  *   Project name: moonsphere
  *   Module name: moonsphere-cli
@@ -22,9 +23,6 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the license.
  */
-
-'use strict';
-
 const utils = require('../helpers/helpers.cjs');
 const promisifyUtils = require('../helpers/promisify-utils.cjs');
 const { submodules } = require('../config.cjs');

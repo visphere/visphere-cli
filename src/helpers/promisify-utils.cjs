@@ -1,10 +1,11 @@
+'use strict';
 /*
  * Copyright (c) 2023 by MILOSZ GILGA <https://miloszgilga.pl>
  * Silesian University of Technology
  *
  *   File name: promisify-utils.cjs
  *   Created at: 2023-08-10, 22:29:41
- *   Last updated at: 2023-08-13, 14:53:08
+ *   Last updated at: 2023-08-14, 01:56:37
  *
  *   Project name: moonsphere
  *   Module name: moonsphere-cli
@@ -22,9 +23,6 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the license.
  */
-
-'use strict';
-
 const { Spinner } = require('cli-spinner');
 const { spawn, exec } = require('promisify-child-process');
 const utils = require('./helpers.cjs');
