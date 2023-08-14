@@ -35,9 +35,9 @@ utils.printBaseMigratorInfo(mode);
 
 const targetDirectory = submodules.landingPage.path;
 const containerName = submodules.landingPage.containerName;
-const outputDir = '/msph-landing-page-content/dist/';
+const outputDir = '/msph-landing-page-content/';
 
-const allStages = 5;
+const allStages = 8;
 let currentStage = 1;
 
 async function processing() {
@@ -56,9 +56,30 @@ async function processing() {
       options: { cwd: targetDirectory },
     });
     await promisifyUtils.createPromisifyProcess({
-      execCommand: `docker exec ${containerName} rm -rf ${outputDir}`,
-      messOnStart: 'Clear docker container /dist directory',
-      messOnEnd: 'cleared docker container /dist directory',
+      execCommand: `docker exec ${containerName} rm -rf ${outputDir}/*`,
+      messOnStart: `Clearing docker container ${outputDir} directory`,
+      messOnEnd: `cleared docker container ${outputDir} directory`,
+      stage: currentStage++,
+      allStages,
+    });
+    await promisifyUtils.createPromisifyProcess({
+      execCommand: `docker cp ${targetDirectory}/package.json ${containerName}:${outputDir}`,
+      messOnStart: 'Moving package.json file into docker container',
+      messOnEnd: 'moved package.json file into docker container',
+      stage: currentStage++,
+      allStages,
+    });
+    await promisifyUtils.createPromisifyProcess({
+      execCommand: `docker cp ${targetDirectory}/yarn.lock ${containerName}:${outputDir}`,
+      messOnStart: 'Moving yarn.lock file into docker container',
+      messOnEnd: 'moved yarn.lock file into docker container',
+      stage: currentStage++,
+      allStages,
+    });
+    await promisifyUtils.createPromisifyProcess({
+      execCommand: `docker exec ${containerName} yarn install --prod -C ${outputDir}/package.json`,
+      messOnStart: `Installing dependencies via yarn install`,
+      messOnEnd: `installed dependencies via yarn install`,
       stage: currentStage++,
       allStages,
     });
