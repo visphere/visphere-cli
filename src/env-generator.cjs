@@ -25,10 +25,10 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { promisify } = require('util');
 const utils = require('./helpers/helpers.cjs');
 const promisifyUtils = require('./helpers/promisify-utils.cjs');
 const { submodules } = require('./config.cjs');
+const { EOL } = require('os');
 
 const templateFileName = '.env.sample';
 const outputFileName = '.env';
@@ -55,9 +55,9 @@ async function checkFile(fileName, filePath, isReverse, stage) {
   const spinner = promisifyUtils.createAndStartSpinner({
     stage,
     allStages,
-    messages: `Checking, file "${fileName}" status`,
+    messages: `Checking file "${fileName}" status`,
   });
-  let exist = await promisify(fs.access)(filePath);
+  let exist = fs.existsSync(filePath);
   if (isReverse) {
     exist = !exist;
   }
@@ -84,6 +84,7 @@ async function generateFile() {
     let outputData = utils.contentHeader;
     const data = await fs.promises.readFile(templateFile, 'utf8');
     const lines = data.split('\n');
+    outputData += EOL;
     for (const line of lines) {
       if (
         (line.startsWith('#') || line.startsWith('# ')) &&
@@ -91,7 +92,7 @@ async function generateFile() {
       ) {
         continue;
       }
-      outputData += line;
+      outputData += line + EOL;
     }
     await fs.promises.writeFile(outputFile, outputData);
     utils.stopSucessSpinner(
