@@ -25,37 +25,21 @@
  */
 const fs = require('fs');
 const path = require('path');
-const lodash = require('lodash');
-const axios = require('axios');
+const normalizeData = require('normalize-package-data');
 const utils = require('./helpers/helpers.cjs');
-const promisifyUtils = require('./helpers/promisify-utils.cjs');
 const { submodules } = require('./config.cjs');
+const promisifyUtils = require('./helpers/promisify-utils.cjs');
+const staticReplacements = require('./utils/migrator-static-replacements');
 
-const scanningPackages = [
-  submodules.base.path,
-  submodules.scripts.path,
-  submodules.webClient.path,
-  submodules.desktopClient.path,
-  submodules.landingPage.path,
-];
-
-const staticReplacements = [
-  {
-    name: '@ngx-translate/core',
-    repoUrl: 'https://github.com/ngx-translate/core',
-    license: 'MIT',
-    env: 'runtime',
-  },
-  {
-    name: '@ngx-translate/http-loader',
-    repoUrl: 'https://github.com/ngx-translate/core',
-    license: 'MIT',
-    env: 'runtime',
-  },
+const scanningModules = [
+  { name: 'moonsphere-base', dir: submodules.base.path },
+  { name: 'moonsphere-scripts', dir: submodules.scripts.path },
+  { name: 'moonsphere-web-client', dir: submodules.webClient.path },
+  { name: 'moonsphere-desktop-client', dir: submodules.desktopClient.path },
+  { name: 'moonsphere-landing-page', dir: submodules.landingPage.path },
 ];
 
 const containerName = submodules.contentDistributor.containerName;
-
 const outputMarkdownfile = 'LIBRARIES.md';
 const outputJsonfile = 'libraries.json';
 const outputMarkdownPath = path.join(submodules.base.path, outputMarkdownfile);
@@ -71,7 +55,7 @@ utils.printCopyHeader();
 utils.printExecutableScriptInfo();
 
 console.log(
-  `Scanning packages: ${scanningPackages.map(p => p.cyan).join(', ')}`
+  `Scanning packages: ${scanningModules.map(p => p.cyan).join(', ')}`
 );
 console.log(
   `Output files: [ ${outputMarkdownfile.cyan}, ${outputJsonfile.cyan} ]`
@@ -79,131 +63,153 @@ console.log(
 
 utils.printNewLine();
 
-const allStages = 6;
+const allStages = 4 + scanningModules.length;
 let currentStage = 1;
 
-async function readAllScannedPackagesDependencies() {
-  const resultsArray = [];
-  const spinner = promisifyUtils.createAndStartSpinner({
-    stage: currentStage,
-    allStages,
-    messages: 'Scanning "package.json" files',
+async function findPackageJsonFiles(directory) {
+  const packageJsonFiles = [];
+  const topLevelFiles = await fs.promises.readdir(directory, {
+    withFileTypes: true,
   });
-  try {
-    for (const packagePath of scanningPackages) {
-      const data = await fs.promises.readFile(
-        path.join(packagePath, 'package.json')
-      );
-      const parsedData = JSON.parse(data.toString());
-
-      const depSection = parsedData.dependencies;
-      const devDepSection = parsedData.devDependencies;
-      if (depSection) {
-        resultsArray.push(
-          ...Object.keys(depSection).map(name => ({ name, env: 'runtime' }))
-        );
+  await Promise.all(
+    topLevelFiles.map(async topLevelFile => {
+      const topLevelFilePath = path.join(directory, topLevelFile.name);
+      if (!topLevelFile.isDirectory() || topLevelFile.name === 'node_modules') {
+        return;
       }
-      if (devDepSection) {
-        resultsArray.push(
-          ...Object.keys(devDepSection).map(name => ({
-            name,
-            env: 'development',
-          }))
-        );
-      }
-    }
-  } catch (err) {
-    utils.stopErrorSpinner(
-      spinner,
-      'Unable to scan some of the packages',
-      currentStage,
-      allStages
-    );
-    throw new Error(err);
-  }
-  const resultArr = lodash
-    .uniqBy(resultsArray, 'name')
-    .sort((x, y) => x.name.localeCompare(y.name));
-  utils.stopSucessSpinner(
-    spinner,
-    `Ended scanning "package.json" files. Resolve ${resultArr.length} dependencies`,
-    currentStage++,
-    allStages
-  );
-  return resultArr;
-}
-
-async function connectWithApiAndGenerateOutputObject(allLibrariesNames) {
-  const outputArray = [];
-  let fetchedSucceed = 0;
-  let index = 1;
-  const spinner = promisifyUtils.createAndStartSpinner({
-    stage: currentStage,
-    allStages,
-    messages: 'Fetching additional informations for scanned libraries',
-  });
-  try {
-    for (const { name, env } of allLibrariesNames) {
-      const replacer = staticReplacements.find(
-        ({ name: pName }) => pName === name
-      );
-      const libraryColorName = name.cyan;
-      if (!replacer) {
-        const { data } = await axios.get(
-          `https://registry.npmjs.org/${name}/latest`
-        );
-        if (data) fetchedSucceed++;
-        let repoUrl = '';
-        if (data.repository) {
-          repoUrl = data.repository.url;
-          const matchRegexp = repoUrl.match(/\.com\/(.+?)\.git$/);
-          if (matchRegexp) {
-            repoUrl = `https://github.com/${matchRegexp[1]}`;
-          }
-        } else if (data.homepage) {
-          repoUrl = data.homepage;
-        }
-        outputArray.push({ name, repoUrl, license: data.license, env });
-        utils.revalidateSpinnerContent(
-          spinner,
-          currentStage,
-          allStages,
-          `${index++}/${
-            allLibrariesNames.length
-          } Fetched data for: ${libraryColorName}.`
+      const topLevelNestedFiles = await fs.promises.readdir(topLevelFilePath, {
+        withFileTypes: true,
+      });
+      if (
+        !topLevelNestedFiles.some(
+          nestedFile => nestedFile.name === 'package.json'
+        )
+      ) {
+        await Promise.all(
+          topLevelNestedFiles.map(async topLevelNestedFile => {
+            const topLevelNestedFilePath = path.join(
+              topLevelFilePath,
+              topLevelNestedFile.name
+            );
+            if (
+              !topLevelNestedFile.isDirectory() ||
+              topLevelNestedFile.name === 'node_modules'
+            ) {
+              return;
+            }
+            const nestedNestedFiles = await fs.promises.readdir(
+              topLevelNestedFilePath,
+              { withFileTypes: true }
+            );
+            if (
+              nestedNestedFiles.some(
+                nestedFile => nestedFile.name === 'package.json'
+              )
+            ) {
+              packageJsonFiles.push(
+                path.join(topLevelNestedFilePath, 'package.json')
+              );
+            }
+          })
         );
       } else {
-        outputArray.push(replacer);
+        packageJsonFiles.push(path.join(topLevelFilePath, 'package.json'));
+      }
+    })
+  );
+  return packageJsonFiles;
+}
+
+function sortPackages(allDeps) {
+  return allDeps.sort((x, y) => x.name.localeCompare(y.name));
+}
+
+async function scanNodePackages({ name, dir }) {
+  const allPackages = [];
+  let scannedLibsCount = 0;
+  let allPackagesCount = 0;
+  const spinner = promisifyUtils.createAndStartSpinner({
+    stage: currentStage,
+    allStages,
+    messages: `Scanning "package.json" files from ${name}`,
+  });
+  try {
+    const dirPath = `${dir}/node_modules`;
+    const packageJsonFiles = await findPackageJsonFiles(dirPath);
+    for (const packageJsonFile of packageJsonFiles) {
+      const rawPackageData = await fs.promises.readFile(packageJsonFile);
+      const packageData = JSON.parse(rawPackageData);
+      allPackagesCount++;
+      try {
+        normalizeData(packageData, true);
+      } catch (err) {
+        continue;
+      }
+      if (packageData?.name) {
         utils.revalidateSpinnerContent(
           spinner,
           currentStage,
           allStages,
-          `${index++}/${
-            allLibrariesNames.length
-          } Skipping fetching data for: ${libraryColorName}.`
+          `${scannedLibsCount++}/${packageJsonFiles.length} Scanning: ${
+            packageData?.name
+          }.`
         );
+        const repoUrl = packageData?.repository?.url.replace(
+          /^(git(?:\+(?:https|ssh)|):\/\/(?:[^@]+@|)github\.com\/)(.*?)(\.git)(?:#.*)?$/,
+          'https://github.com/$2'
+        );
+        const { name, license } = packageData;
+        if (
+          !allPackages.some(({ name: packageName }) => packageName === name)
+        ) {
+          const replacement = staticReplacements.find(
+            ({ name: replName }) => replName === name
+          );
+          if (replacement) {
+            const { name, repoUrl, license } = replacement;
+            allPackages.push({ name, repoUrl, license });
+          } else {
+            allPackages.push({
+              name,
+              repoUrl: repoUrl || 'https://github.com',
+              license:
+                (license?.type ? license.type : license) || 'Not specified',
+            });
+          }
+        }
       }
     }
   } catch (err) {
     utils.stopErrorSpinner(
       spinner,
-      'Unable to fetch additional informations for scanned libraries',
+      `Unable to scan some of the packages from ${name}`,
       currentStage,
       allStages
     );
     throw new Error(err);
   }
-  const percentage = Math.ceil(
-    (fetchedSucceed / allLibrariesNames.length) * 100
-  );
-  const coverageInfo = `${fetchedSucceed} of ${allLibrariesNames.length} (coverage: ${percentage}%)`;
+  const endMess = `Ended scanning "package.json" files from ${name}.`;
+  const resolve = `Resolve ${scannedLibsCount} of ${allPackagesCount} packages`;
   utils.stopSucessSpinner(
     spinner,
-    `Fetched additional informations for ${coverageInfo} scanned libraries`,
+    `${endMess} ${resolve}`,
     currentStage++,
     allStages
   );
-  return outputArray;
+  return sortPackages(allPackages);
+}
+
+async function scanAllModules() {
+  const allDeps = [];
+  for (const scanningModule of scanningModules) {
+    const allPackages = await scanNodePackages(scanningModule);
+    allDeps.push(
+      ...allPackages.filter(
+        ({ name }) => !allDeps.some(({ name: deptName }) => deptName === name)
+      )
+    );
+  }
+  return sortPackages(allDeps);
 }
 
 async function saveContentToLibrariesFiles(outputLibsArray) {
@@ -215,22 +221,13 @@ async function saveContentToLibrariesFiles(outputLibsArray) {
     messages: 'Saving generated libraries data in output files...',
   });
   try {
-    const librariesCountTrivia = [
-      `All used 3rd party libraries count: **${outputLibsArray.length}**<br>\n`,
-      `Runtime 3rd party libraries count: **${
-        outputLibsArray.filter(d => d.env === 'runtime').length
-      }**<br>\n`,
-      `Development 3rd party libraries count: **${
-        outputLibsArray.filter(d => d.env === 'development').length
-      }**\n\n`,
-    ].join('');
+    const librariesCountTrivia = `All used 3rd party libraries count: **${outputLibsArray.length}**<br>\n`;
     await fs.promises.writeFile(outputMarkdownPath, librariesCountTrivia);
     const table = markdownTable([
-      ['Library', 'License', 'Environment'],
-      ...outputLibsArray.map(({ name, repoUrl, license, env }) => [
+      ['Library', 'License'],
+      ...outputLibsArray.map(({ name, repoUrl, license }) => [
         `[${name}](${repoUrl})`,
         license,
-        env,
       ]),
     ]);
     await fs.promises.appendFile(outputMarkdownPath, table + '\n');
@@ -243,11 +240,9 @@ async function saveContentToLibrariesFiles(outputLibsArray) {
     await fs.promises.writeFile(
       outputJsonPath,
       JSON.stringify(
-        outputLibsArray.map(({ name, repoUrl, license, env }) => ({
+        outputLibsArray.map(({ name, repoUrl }) => ({
           name,
           repoUrl,
-          license,
-          env,
         }))
       )
     );
@@ -281,10 +276,7 @@ async function processing() {
       stage: currentStage++,
       allStages,
     });
-    const allLibrariesNames = await readAllScannedPackagesDependencies();
-    const outputLibsArray = await connectWithApiAndGenerateOutputObject(
-      allLibrariesNames
-    );
+    const outputLibsArray = await scanAllModules();
     await saveContentToLibrariesFiles(outputLibsArray);
     await promisifyUtils.createPromisifyProcess({
       execCommand: `docker exec ${containerName} rm -rf /var/www/html/static/misc/${outputJsonfile}`,
