@@ -61,5 +61,9 @@ module.exports = {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-cli'),
       containerName: null,
     },
+    infraMonorepo: {
+      path: path.resolve(__dirname, '..', '..', 'moonsphere-infra-monorepo'),
+      containerName: null,
+    },
   },
 };
