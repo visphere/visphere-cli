@@ -24,6 +24,8 @@
     "infra:jib:account-service": "node src/infra/jib-image.cjs --service=msph-account-service --libs=msph-shared-lib",
     "infra:jib:auth-service": "node src/infra/jib-image.cjs --service=msph-auth-service --libs=msph-shared-lib",
     "infra:jib:misc-service": "node src/infra/jib-image.cjs --service=msph-misc-service --libs=msph-shared-lib",
+    "infra:jib:multimedia-service": "node src/infra/jib-image.cjs --service=msph-multimedia-service --libs=msph-shared-lib",
+    "infra:jib:notification-service": "node src/infra/jib-image.cjs --service=msph-notification-service --libs=msph-shared-lib",
     "configure:husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\"",
     "lint:check": "npx eslint ./src/**/*.cjs",
     "lint:fix": "npx eslint ./src/**/*.cjs --fix",
