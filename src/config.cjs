@@ -12,14 +12,9 @@ module.exports = {
   license: 'Apache 2.0',
   mainDeveloper: 'MILOSZ GILGA',
   submodules: {
-    contentDistributor: {
-      path: path.resolve(
-        __dirname,
-        '..',
-        '..',
-        'moonsphere-content-distributor'
-      ),
-      containerName: 'msph-content-distributor',
+    s3Static: {
+      path: path.resolve(__dirname, '..', '..', 'moonsphere-base'),
+      containerName: 'msph-s3-static',
     },
     webClient: {
       path: path.resolve(__dirname, '..', '..', 'moonsphere-web-client'),

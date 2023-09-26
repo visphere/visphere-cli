@@ -10,7 +10,7 @@ const promisifyUtils = require('./helpers/promisify-utils.cjs');
 const { submodules } = require('./config.cjs');
 const { EOL } = require('os');
 
-const templateFileName = '.env.sample';
+const templateFileName = 'example.env';
 const outputFileName = '.env';
 
 const templateFile = path.join(submodules.base.path, templateFileName);
