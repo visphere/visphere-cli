@@ -3,7 +3,9 @@
  * Copyright (c) 2023 by MoonSphere Systems
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
+const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
 const colors = require('colors');
 const commandLineArgs = require('command-line-args');
 const config = require('../config.cjs');
@@ -102,5 +104,19 @@ module.exports = {
     if (isReplace) {
       console.log(`Executing script in ${'replace'.cyan} mode.`);
     }
+  },
+  loadEnvVariables: function () {
+    const envPath = path.join(config.submodules.base.path, '.env');
+    if (fs.existsSync(envPath)) {
+      dotenv.config({ path: envPath });
+    }
+  },
+  s3EstabilishedConnCmd: function (s3ContainerPort) {
+    return [
+      'mc alias set miniotr',
+      `http://localhost:${s3ContainerPort}`,
+      process.env.ENV_MSPH_MINIO_USERNAME,
+      process.env.ENV_MSPH_MINIO_PASSWORD,
+    ].join(' ');
   },
 };

@@ -19,17 +19,16 @@ const scanningModules = [
   { name: 'moonsphere-landing-page', dir: submodules.landingPage.path },
 ];
 
-const containerName = submodules.contentDistributor.containerName;
+const containerName = submodules.s3Static.containerName;
 const outputMarkdownfile = 'LIBRARIES.md';
 const outputJsonfile = 'libraries.json';
 const outputMarkdownPath = path.join(submodules.base.path, outputMarkdownfile);
-const outputJsonPath = path.join(
-  submodules.contentDistributor.path,
-  'content',
-  'static',
-  'misc',
-  outputJsonfile
-);
+const outputJsonDir = path.join(submodules.s3Static.path, 's3-static', 'misc');
+const outputJsonPath = path.join(outputJsonDir, outputJsonfile);
+const containerOutputPath = `/s3-transfer/misc/${outputJsonfile}`;
+const s3ContainerPort = 9000;
+
+utils.loadEnvVariables();
 
 utils.printCopyHeader();
 utils.printExecutableScriptInfo();
@@ -45,6 +44,10 @@ utils.printNewLine();
 
 const allStages = 4 + scanningModules.length;
 let currentStage = 1;
+
+function dockerExec(command) {
+  return `docker exec ${containerName} ${command}`;
+}
 
 async function findPackageJsonFiles(directory) {
   const packageJsonFiles = [];
@@ -217,6 +220,9 @@ async function saveContentToLibrariesFiles(outputLibsArray) {
       allStages,
       `${++currentOutput}/2 Saved data to file: ${outputMarkdownfile.cyan}.`
     );
+    if (!fs.existsSync(outputJsonDir)) {
+      fs.promises.mkdir(outputJsonDir);
+    }
     await fs.promises.writeFile(
       outputJsonPath,
       JSON.stringify(
@@ -224,7 +230,8 @@ async function saveContentToLibrariesFiles(outputLibsArray) {
           name,
           repoUrl,
         }))
-      )
+      ),
+      { recursive: true }
     );
     utils.revalidateSpinnerContent(
       spinner,
@@ -259,16 +266,16 @@ async function processing() {
     const outputLibsArray = await scanAllModules();
     await saveContentToLibrariesFiles(outputLibsArray);
     await promisifyUtils.createPromisifyProcess({
-      execCommand: `docker exec ${containerName} rm -rf /var/www/html/static/misc/${outputJsonfile}`,
-      messOnStart: `Removing ${outputJsonfile} file from docker container`,
-      messOnEnd: `removed ${outputJsonfile} file from docker container`,
+      execCommand: dockerExec(utils.s3estabilishedConnCmd(s3ContainerPort)),
+      messOnStart: 'Etabilishing connection with s3 bucket',
+      messOnEnd: 'etabilished connection with s3 bucket',
       stage: currentStage++,
       allStages,
     });
     await promisifyUtils.createPromisifyProcess({
-      execCommand: `docker cp ${outputJsonPath} ${containerName}:/var/www/html/static/misc/`,
-      messOnStart: `Migrate ${outputJsonfile} file into docker container`,
-      messOnEnd: `migrated ${outputJsonfile} file into docker container`,
+      execCommand: `docker exec ${containerName} mc cp ${containerOutputPath} miniotr/static/misc/${outputJsonfile}`,
+      messOnStart: `Migrate ${outputJsonfile} file into s3 bucket`,
+      messOnEnd: `migrated ${outputJsonfile} file into s3 bucket`,
       stage: currentStage++,
       allStages,
     });
