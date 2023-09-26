@@ -3,6 +3,7 @@
  * Copyright (c) 2023 by MoonSphere Systems
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
+const path = require('path');
 const { Spinner } = require('cli-spinner');
 const { spawn, exec } = require('promisify-child-process');
 const utils = require('./helpers.cjs');
@@ -81,5 +82,44 @@ module.exports = {
     const spinner = new Spinner(`%s [${stage}/${allStages}] ${messages}...`);
     spinner.start();
     return spinner;
+  },
+  dockerBuildPipeline: async function ({
+    imageName,
+    mode,
+    currentStage,
+    allStages,
+    rootModule,
+  }) {
+    let stage = currentStage;
+    const tagName = `${process.env.ENV_MSPH_DOCKERHUB_USERNAME}/${imageName}-${mode}`;
+    await this.createPromisifyProcess({
+      execCommand: [
+        'docker login',
+        `--username ${process.env.ENV_MSPH_DOCKERHUB_USERNAME}`,
+        `--password ${process.env.ENV_MSPH_DOCKERHUB_PASSWORD}`,
+      ].join(' '),
+      messOnStart: 'Logging into docker service',
+      messOnEnd: 'logged into docker service',
+      stage: stage++,
+      allStages,
+    });
+    await this.createPromisifyProcess({
+      execCommand: `docker build ../ -t ${tagName} -f ${path.join(
+        rootModule,
+        'Dockerfile'
+      )} --build-arg BUILD_MODE=${mode}`,
+      messOnStart: 'Building docker context from Dockerfile',
+      messOnEnd: 'build docker context from Dockerfile',
+      stage: stage++,
+      allStages,
+    });
+    await this.createPromisifyProcess({
+      execCommand: `docker push ${tagName}`,
+      messOnStart: 'Pusing image to remote DockerHub repository',
+      messOnEnd: 'pushed image to remote DockerHub repository',
+      stage: stage++,
+      allStages,
+    });
+    return stage;
   },
 };
