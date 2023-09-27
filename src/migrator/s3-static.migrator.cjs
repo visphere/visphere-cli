@@ -30,7 +30,7 @@ async function processing() {
       allStages,
     });
     await promisifyUtils.createPromisifyProcess({
-      execCommand: dockerExec(utils.s3estabilishedConnCmd(s3ContainerPort)),
+      execCommand: dockerExec(utils.s3EstabilishedConnCmd(s3ContainerPort)),
       messOnStart: 'Etabilishing connection with s3 bucket',
       messOnEnd: 'etabilished connection with s3 bucket',
       stage: currentStage++,
