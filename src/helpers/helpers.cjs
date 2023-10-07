@@ -15,12 +15,13 @@ colors.enable();
 
 module.exports = {
   printCopyHeader: function () {
+    console.log();
     console.log(
-      `(c) ${new Date().getFullYear()} by ${config.licensedBy.cyan}.`
+      `(c) ${new Date().getFullYear()} by ${config.licensedBy.cyan}.${EOL}`
     );
-    console.log(`Developed by ${config.mainDeveloper}.${EOL}`);
-    console.log(`  Personal page: ${config.personalPageUrl}`);
-    console.log(`  Repository url: ${config.projectPageUrl}${EOL}`);
+    console.log(`Developed by ${config.mainDeveloper}`);
+    console.log(`Personal page: ${config.personalPageUrl}`);
+    console.log(`Repository url: ${config.projectPageUrl}${EOL}`);
   },
   contentHeader: [
     `#! (c) ${new Date().getFullYear()} by ${config.licensedBy}.${EOL}`,

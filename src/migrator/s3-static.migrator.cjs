@@ -11,6 +11,7 @@ utils.loadEnvVariables();
 
 utils.printCopyHeader();
 utils.printExecutableScriptInfo();
+utils.printNewLine();
 
 const containerName = submodules.s3Static.containerName;
 const s3ContainerPort = 9000;
