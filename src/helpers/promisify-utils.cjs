@@ -1,6 +1,6 @@
 'use strict';
 /*
- * Copyright (c) 2023 by MoonSphere Systems
+ * Copyright (c) 2023 by Visphere & Vsph Technologies
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
 const path = require('path');
@@ -91,12 +91,13 @@ module.exports = {
     rootModule,
   }) {
     let stage = currentStage;
-    const tagName = `${process.env.ENV_MSPH_DOCKERHUB_USERNAME}/${imageName}-${mode}`;
+    const username = process.env.ENV_VSPH_DOCKERHUB_USERNAME;
+    const tagName = `${username}/${imageName}-${mode}`;
     await this.createPromisifyProcess({
       execCommand: [
         'docker login',
-        `--username ${process.env.ENV_MSPH_DOCKERHUB_USERNAME}`,
-        `--password ${process.env.ENV_MSPH_DOCKERHUB_PASSWORD}`,
+        `--username ${username}`,
+        `--password ${process.env.ENV_VSPH_DOCKERHUB_PASSWORD}`,
       ].join(' '),
       messOnStart: 'Logging into docker service',
       messOnEnd: 'logged into docker service',

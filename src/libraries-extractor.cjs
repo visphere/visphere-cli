@@ -1,6 +1,6 @@
 'use strict';
 /*
- * Copyright (c) 2023 by MoonSphere Systems
+ * Copyright (c) 2023 by Visphere & Vsph Technologies
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
 const fs = require('fs');
@@ -12,11 +12,11 @@ const promisifyUtils = require('./helpers/promisify-utils.cjs');
 const staticReplacements = require('./utils/migrator-static-replacements');
 
 const scanningModules = [
-  { name: 'moonsphere-base', dir: submodules.base.path },
-  { name: 'moonsphere-scripts', dir: submodules.scripts.path },
-  { name: 'moonsphere-web-client', dir: submodules.webClient.path },
-  { name: 'moonsphere-desktop-client', dir: submodules.desktopClient.path },
-  { name: 'moonsphere-landing-page', dir: submodules.landingPage.path },
+  { name: 'visphere-base', dir: submodules.base.path },
+  { name: 'visphere-scripts', dir: submodules.scripts.path },
+  { name: 'visphere-web-client', dir: submodules.webClient.path },
+  { name: 'visphere-desktop-client', dir: submodules.desktopClient.path },
+  { name: 'visphere-landing-page', dir: submodules.landingPage.path },
 ];
 
 const containerName = submodules.s3Static.containerName;

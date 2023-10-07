@@ -1,5 +1,5 @@
 {
-  "name": "moonsphere-cli",
+  "name": "visphere-cli",
   "version": "1.0.0",
   "scripts": {
     "docker-exp:web-client:dev": "node src/builder/web-client.builder.cjs --mode=dev",
@@ -9,14 +9,14 @@
     "docker-mig:s3-static": "node src/migrator/s3-static.migrator.cjs",
     "env:gen": "node src/env-generator.cjs",
     "libs:extr": "node src/libraries-extractor.cjs",
-    "infra:jib:config-server": "node src/infra/jib-image.cjs --service=msph-config-server",
-    "infra:jib:discovery-server": "node src/infra/jib-image.cjs --service=msph-discovery-server",
-    "infra:jib:api-gateway": "node src/infra/jib-image.cjs --service=msph-api-gateway",
-    "infra:jib:account-service": "node src/infra/jib-image.cjs --service=msph-account-service --libs=msph-shared-lib",
-    "infra:jib:auth-service": "node src/infra/jib-image.cjs --service=msph-auth-service --libs=msph-shared-lib",
-    "infra:jib:misc-service": "node src/infra/jib-image.cjs --service=msph-misc-service --libs=msph-shared-lib",
-    "infra:jib:multimedia-service": "node src/infra/jib-image.cjs --service=msph-multimedia-service --libs=msph-shared-lib",
-    "infra:jib:notification-service": "node src/infra/jib-image.cjs --service=msph-notification-service --libs=msph-shared-lib",
+    "infra:jib:config-server": "node src/infra/jib-image.cjs --service=vsph-config-server",
+    "infra:jib:discovery-server": "node src/infra/jib-image.cjs --service=vsph-discovery-server",
+    "infra:jib:api-gateway": "node src/infra/jib-image.cjs --service=vsph-api-gateway",
+    "infra:jib:account-service": "node src/infra/jib-image.cjs --service=vsph-account-service --libs=vsph-shared-lib",
+    "infra:jib:auth-service": "node src/infra/jib-image.cjs --service=vsph-auth-service --libs=vsph-shared-lib",
+    "infra:jib:misc-service": "node src/infra/jib-image.cjs --service=vsph-misc-service --libs=vsph-shared-lib",
+    "infra:jib:multimedia-service": "node src/infra/jib-image.cjs --service=vsph-multimedia-service --libs=vsph-shared-lib",
+    "infra:jib:notification-service": "node src/infra/jib-image.cjs --service=vsph-notification-service --libs=vsph-shared-lib",
     "configure:husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\"",
     "lint:check": "npx eslint ./src/**/*.cjs",
     "lint:fix": "npx eslint ./src/**/*.cjs --fix",
@@ -24,9 +24,9 @@
   },
   "private": true,
   "author": {
-    "name": "MoonSphere Systems",
-    "email": "info@moonsphere.pl",
-    "url": "https://moonsphere.pl"
+    "name": "Visphere Systems",
+    "email": "info@visphere.pl",
+    "url": "https://visphere.pl"
   },
   "lint-staged": {
     "**/*.{js,cjs,json}": [

@@ -1,43 +1,42 @@
 'use strict';
 /*
- * Copyright (c) 2023 by MoonSphere Systems
+ * Copyright (c) 2023 by Visphere & Vsph Technologies
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
 const path = require('path');
 
 module.exports = {
   personalPageUrl: 'https://miloszgilga.pl',
-  projectPageUrl: 'https://github.com/moonsphere-systems',
-  licensedBy: 'MoonSphere Systems',
-  license: 'Apache 2.0',
+  projectPageUrl: 'https://github.com/visphere',
+  licensedBy: 'Visphere',
   mainDeveloper: 'MILOSZ GILGA',
   submodules: {
     s3Static: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-base'),
-      containerName: 'msph-s3-static',
+      path: path.resolve(__dirname, '..', '..', 'visphere-base'),
+      containerName: 'vsph-s3-static',
     },
     webClient: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-web-client'),
-      containerName: 'msph-web-client',
+      path: path.resolve(__dirname, '..', '..', 'visphere-web-client'),
+      containerName: 'vsph-web-client',
     },
     landingPage: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-landing-page'),
-      containerName: 'msph-landing-page',
+      path: path.resolve(__dirname, '..', '..', 'visphere-landing-page'),
+      containerName: 'vsph-landing-page',
     },
     desktopClient: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-desktop-client'),
+      path: path.resolve(__dirname, '..', '..', 'visphere-desktop-client'),
       containerName: null,
     },
     base: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-base'),
+      path: path.resolve(__dirname, '..', '..', 'visphere-base'),
       containerName: null,
     },
     scripts: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-cli'),
+      path: path.resolve(__dirname, '..', '..', 'visphere-cli'),
       containerName: null,
     },
     infraMonorepo: {
-      path: path.resolve(__dirname, '..', '..', 'moonsphere-infra-monorepo'),
+      path: path.resolve(__dirname, '..', '..', 'visphere-infra-monorepo'),
       containerName: null,
     },
   },

@@ -1,6 +1,6 @@
 'use strict';
 /*
- * Copyright (c) 2023 by MoonSphere Systems
+ * Copyright (c) 2023 by Visphere & Vsph Technologies
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
 const fs = require('fs');
@@ -10,7 +10,7 @@ const utils = require('../helpers/helpers.cjs');
 const promisifyUtils = require('../helpers/promisify-utils.cjs');
 const { submodules } = require('../config.cjs');
 
-const availableLibraries = ['msph-shared-lib'];
+const availableLibraries = ['vsph-shared-lib'];
 
 const { service, libs } = utils.checkInputArguments([
   { name: 'service', alias: 's', type: String },
@@ -29,13 +29,13 @@ utils.printExecutableScriptInfo();
 utils.printNewLine();
 
 const monorepoDir = submodules.infraMonorepo.path;
-const rootPomProjectName = 'moonsphere-infra-monorepo';
+const rootPomProjectName = 'visphere-infra-monorepo';
 const m2Repository = path.join(
   os.homedir(),
   '.m2',
   'repository',
   'pl',
-  'moonsphere'
+  'visphere'
 );
 const allStages = libs ? 8 : 5;
 let currentStage = 1;

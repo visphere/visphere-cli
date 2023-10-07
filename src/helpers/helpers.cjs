@@ -1,6 +1,6 @@
 'use strict';
 /*
- * Copyright (c) 2023 by MoonSphere Systems
+ * Copyright (c) 2023 by Visphere & Vsph Technologies
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
 const fs = require('fs');
@@ -16,18 +16,14 @@ colors.enable();
 module.exports = {
   printCopyHeader: function () {
     console.log(
-      `(c) ${new Date().getFullYear()} by ${config.licensedBy.cyan}. On ${
-        config.license
-      } license.`
+      `(c) ${new Date().getFullYear()} by ${config.licensedBy.cyan}.`
     );
     console.log(`Developed by ${config.mainDeveloper}.${EOL}`);
     console.log(`  Personal page: ${config.personalPageUrl}`);
     console.log(`  Repository url: ${config.projectPageUrl}${EOL}`);
   },
   contentHeader: [
-    `#! (c) ${new Date().getFullYear()} by ${config.licensedBy}. On ${
-      config.license
-    } license.${EOL}`,
+    `#! (c) ${new Date().getFullYear()} by ${config.licensedBy}.${EOL}`,
     `#! Developed by ${config.mainDeveloper}.${EOL}`,
     `#!${EOL}`,
     `#!   Personal page: ${config.personalPageUrl}${EOL}`,
@@ -115,8 +111,8 @@ module.exports = {
     return [
       'mc alias set miniotr',
       `http://localhost:${s3ContainerPort}`,
-      process.env.ENV_MSPH_MINIO_USERNAME,
-      process.env.ENV_MSPH_MINIO_PASSWORD,
+      process.env.ENV_VSPH_MINIO_USERNAME,
+      process.env.ENV_VSPH_MINIO_PASSWORD,
     ].join(' ');
   },
 };

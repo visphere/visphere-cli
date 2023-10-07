@@ -1,6 +1,6 @@
 'use strict';
 /*
- * Copyright (c) 2023 by MoonSphere Systems
+ * Copyright (c) 2023 by Visphere & Vsph Technologies
  * Originally developed by Miłosz Gilga <https://miloszgilga.pl>
  */
 const utils = require('../helpers/helpers.cjs');
@@ -20,7 +20,7 @@ let currentStage = 1;
 async function processing() {
   try {
     await promisifyUtils.dockerBuildPipeline({
-      imageName: 'msph-landing-page',
+      imageName: 'vsph-landing-page',
       mode,
       currentStage,
       allStages,
