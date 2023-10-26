@@ -17,7 +17,7 @@ const { service, libs } = utils.checkInputArguments([
   { name: 'libs', alias: 'l', type: String },
 ]);
 
-if (!availableLibraries.some(s => libs.split(',').includes(s))) {
+if (libs && !availableLibraries.some(s => libs.split(',').includes(s))) {
   utils.printErrorMessage(
     `Unrecognized library. Available only ${availableLibraries.join(', ')}.`
   );
@@ -47,13 +47,15 @@ async function cleanupM2Repository() {
     messages: 'Removing old artifacts from .m2 local repository',
   });
   try {
-    await fs.promises.rm(path.join(m2Repository, rootPomProjectName), {
-      recursive: true,
-    });
+    const dirPath = path.join(m2Repository, rootPomProjectName);
+    if (fs.existsSync(dirPath)) {
+      await fs.promises.rm(dirPath, { recursive: true });
+    }
     for (const library of libs.split(',')) {
-      await fs.promises.rm(path.join(m2Repository, library), {
-        recursive: true,
-      });
+      const libraryPath = path.join(m2Repository, library);
+      if (fs.existsSync(libraryPath)) {
+        await fs.promises.rm(libraryPath, { recursive: true });
+      }
     }
     utils.stopSucessSpinner(
       spinner,
