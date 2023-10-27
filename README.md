@@ -2,4 +2,4 @@
 
 # Visphere CLI
 
-in progress
+Node command line interface for managing rest of Visphere projects and docker containers.
