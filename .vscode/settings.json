@@ -24,8 +24,7 @@
     "isActive": true,
     "autoHeader": "autoSave",
     "include": ["javascript"],
-    "enforceHeader": true,
-    "replace": ["File name", "Last modified"]
+    "enforceHeader": true
   },
   "psi-header.lang-config": [
     {
