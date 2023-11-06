@@ -6,6 +6,8 @@
     "docker-exp:web-client:prod": "node src/builder/web-client.builder.cjs --mode=prod",
     "docker-exp:landing-page:dev": "node src/builder/landing-page.builder.cjs --mode=dev",
     "docker-exp:landing-page:prod": "node src/builder/landing-page.builder.cjs --mode=prod",
+    "docker-exp:mail-parser:dev": "node src/builder/mail-parser.builder.cjs --mode=dev",
+    "docker-exp:mail-parser:prod": "node src/builder/mail-parser.builder.cjs --mode=prod",
     "docker-mig:s3-static": "node src/migrator/s3-static.migrator.cjs",
     "env:gen": "node src/env-generator.cjs",
     "libs:extr": "node src/libraries-extractor.cjs",

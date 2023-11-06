@@ -17,6 +17,7 @@ const scanningModules = [
   { name: 'visphere-web-client', dir: submodules.webClient.path },
   { name: 'visphere-desktop-client', dir: submodules.desktopClient.path },
   { name: 'visphere-landing-page', dir: submodules.landingPage.path },
+  { name: 'visphere-mail-parser', dir: submodules.mailParser.path },
 ];
 
 const containerName = submodules.s3Static.containerName;
@@ -34,7 +35,7 @@ utils.printCopyHeader();
 utils.printExecutableScriptInfo();
 
 console.log(
-  `Scanning packages: ${scanningModules.map(p => p.cyan).join(', ')}`
+  `Scanning packages: ${scanningModules.map(p => p.name.cyan).join(', ')}`
 );
 console.log(
   `Output files: [ ${outputMarkdownfile.cyan}, ${outputJsonfile.cyan} ]`

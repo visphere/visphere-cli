@@ -35,6 +35,10 @@ module.exports = {
       path: path.resolve(__dirname, '..', '..', 'visphere-cli'),
       containerName: null,
     },
+    mailParser: {
+      path: path.resolve(__dirname, '..', '..', 'visphere-mail-parser'),
+      containerName: null,
+    },
     infraMonorepo: {
       path: path.resolve(__dirname, '..', '..', 'visphere-infra-monorepo'),
       containerName: null,
