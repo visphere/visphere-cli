@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/OGlGrFO.png" width="300px"/>
+<img src="https://i.imgur.com/8M69NDc.png" width="300px"/>
 
 # Visphere CLI
 
