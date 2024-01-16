@@ -5,6 +5,7 @@
     "titleBar.inactiveBackground": "#583e15"
   },
   "prettier.configPath": "./.prettierrc.js",
+  "editor.rulers": [120],
   "editor.detectIndentation": false,
   "editor.mouseWheelZoom": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -14,7 +15,6 @@
   "explorer.compactFolders": false,
   "workbench.tree.indent": 20,
   "workbench.iconTheme": "vsc-jetbrains-icons-enhanced",
-  "workbench.preferredDarkColorTheme": "One Dark Pro Monokai Darker",
   "files.insertFinalNewline": true,
   "psi-header.config": {
     "forceToTop": true,
